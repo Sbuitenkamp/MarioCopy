@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\istev\.Rider2019.1\config\consoles\db" t="IncludeRecursive" />
+    <e p="C:\Users\istev\.Rider2019.1\config\extensions" t="IncludeRecursive" />
+    <e p="C:\Users\istev\.Rider2019.1\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\istev\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_MarioCopy.802668161.00" t="ExcludeRecursive" />
+    <e p="D:\School\19-20\Project\Mario Ripoff\MarioCopy\MarioCopy" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="Scripts" t="Include">
+          <e p="Enemies" t="Include">
+            <e p="Goomba.cs" t="Include" />
+          </e>
+          <e p="Enemy.cs" t="Include" />
+          <e p="Item.cs" t="Include" />
+          <e p="Items" t="Include">
+            <e p="Mushroom.cs" t="Include" />
+          </e>
+          <e p="Player" t="Include">
+            <e p="PlayerController.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="MarioCopy.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
