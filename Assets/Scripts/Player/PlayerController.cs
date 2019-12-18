@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    void OnCollisionEnter2D(Collision2D Col)
+    void OnCollisionStay2D(Collision2D Col)
     {
         // ground check; using multiple tags because certain block will get certain tags, but all will be walkable
         List<string> groundTags = new List<string> { "Ground", "Block" };

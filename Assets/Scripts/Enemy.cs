@@ -7,6 +7,6 @@ public interface Enemy
     bool Alive { get; set; }
 
     void Walk();
-    void OnJump(Collision2D Col);
-    void OnFireBall(Collision2D Col);
+    void OnJump(Collision2D col);
+    void OnFireBall(Collision2D col);
 }
