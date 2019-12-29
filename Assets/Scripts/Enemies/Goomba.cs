@@ -33,7 +33,6 @@ public class Goomba : MonoBehaviour, Enemy
         Destroy(GetComponentInChildren<BoxCollider2D>());
         Destroy(gameObject, 1.5f);
     }
-    public void OnFireBall(Collision2D col) { }
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player")) {

@@ -8,6 +8,7 @@ TagManager:
   - Feet
   - Block
   - BlockActivator
+  - Enemy
   layers:
   - Default
   - TransparentFX

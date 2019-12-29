@@ -8,5 +8,4 @@ public interface Enemy
 
     void Walk();
     void OnJump(Collision2D col);
-    void OnFireBall(Collision2D col);
 }

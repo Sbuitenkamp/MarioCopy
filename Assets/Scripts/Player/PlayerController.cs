@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public int Size { get; set; }
     private SpriteRenderer SpriteRenderer;
     private CapsuleCollider2D PlayerCollider;
+    private bool FireBall;
     
     void Start()
     {
@@ -34,8 +35,9 @@ public class PlayerController : MonoBehaviour
         MoveRight = false;
         MoveLeft = false;
         Size = 1;
-        Flipped = false;
+        Flipped = false; // false right; true left
         FeetSize = Feet.size.y;
+        FireBall = false;
     }
 
     void FixedUpdate()
@@ -46,13 +48,11 @@ public class PlayerController : MonoBehaviour
             PerformJump = false;
             Grounded = false;
         }
-
         if (MoveRight || MoveLeft) move(MoveRight);
 
         void jump() {
             RigidBody.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
         }
-
         void move(bool direction) {
             if (direction) {
                 // right
@@ -84,6 +84,31 @@ public class PlayerController : MonoBehaviour
             Vector2 velocity = RigidBody.velocity;
             velocity.x = 0;
             RigidBody.velocity = velocity;
+        }
+
+        // fireball
+        if (Input.GetButton("Fire1")) {
+            // for future updates adding items like ice flower, just put an else if with the corresponding size
+            if (Size == 3) {
+                if (!FireBall) {
+                    FireBall = true;
+                    GameObject fireBall = new GameObject();
+                    fireBall.transform.SetParent(gameObject.transform);
+                    fireBall.AddComponent<FireBall>();
+                    fireBall.AddComponent<Rigidbody2D>();
+                    CircleCollider2D collider = fireBall.AddComponent<CircleCollider2D>();
+                    SpriteRenderer spriteRenderer = fireBall.AddComponent<SpriteRenderer>();
+                    spriteRenderer.sprite = (Sprite) Resources.Load("Objects/FireBall", typeof(Sprite));
+                    Bounds bounds = PlayerCollider.bounds;
+
+                    // fire direction
+                    if (Flipped) {
+                        fireBall.transform.position = new Vector2(gameObject.transform.position.x - bounds.extents.x - 0.3f, bounds.center.y);
+                    } else {
+                        fireBall.transform.position = new Vector2(gameObject.transform.position.x + bounds.extents.x + 0.3f, bounds.center.y);
+                    }
+                }
+            }
         }
     }
     
