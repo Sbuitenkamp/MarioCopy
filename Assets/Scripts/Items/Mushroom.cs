@@ -9,26 +9,27 @@ public class Mushroom : MonoBehaviour, Item
     public int ScoreWorth { get; set; }
     private bool Moving;
     private bool Direction; // true = right; false = left
-    private Rigidbody2D Rigidbody;
+    private Rigidbody2D RigidBody;
     public float Speed = 10.0f;
     private bool Grounded;
+    public float MaxVelocity = 1.5f;
 
     void Start()
     {
         gameObject.SetActive(false);
         SizeIndex = 2;
         Moving = false;
-        Direction = true;
-        Rigidbody = GetComponent<Rigidbody2D>();
+        Direction = false;
+        RigidBody = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
     {
         if (Moving) {
-            if (Grounded) {
-                if (Direction) Rigidbody.AddForce(Vector2.right * Speed);
-                else if (!Direction) Rigidbody.AddForce(Vector2.left * Speed);
-            }
+            Vector2 velocity = RigidBody.velocity;
+            velocity.x = Mathf.Clamp(velocity.x, -MaxVelocity, MaxVelocity);
+            RigidBody.velocity = velocity;
+            if (Grounded) RigidBody.AddForce(Direction ? Vector2.right : Vector2.left * Speed);
         }
     }
 
@@ -43,6 +44,7 @@ public class Mushroom : MonoBehaviour, Item
         Moving = true;
         Grounded = true;
     }
+    
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player")) {
@@ -59,9 +61,21 @@ public class Mushroom : MonoBehaviour, Item
         GroundCheck(col);
     }
 
+    private void OnCollisionStay2D(Collision2D col)
+    {
+        GroundCheck(col);
+        if (!Grounded) return;
+        if (RigidBody.velocity.x == 0.0f) Direction = !Direction;
+    }
+
     private void GroundCheck(Collision2D col)
     {
         List<string> groundTags = new List<string> { "Ground", "Block" };
-        if (groundTags.Where(tag => tag.Contains(col.gameObject.tag)) != null) Grounded = true;
+        Grounded = groundTags.Where(tag => tag.Contains(col.gameObject.tag)) != null;
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Enemy")) Physics2D.IgnoreCollision(col, GetComponent<BoxCollider2D>());
     }
 }

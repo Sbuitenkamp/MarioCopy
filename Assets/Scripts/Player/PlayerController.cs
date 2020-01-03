@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private bool MoveLeft;
     private bool Flipped;
     public float Speed = 25.0f;
+    public float MaxVelocity = 13;
 
     // feet ( ͡° ͜ʖ ͡°)
     private BoxCollider2D Feet;
@@ -42,6 +43,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector2 velocity = RigidBody.velocity;
+        velocity.x = Mathf.Clamp(velocity.x, -MaxVelocity, MaxVelocity);
+        RigidBody.velocity = velocity;
         // prevent double jump and limit jumpheight
         if (PerformJump) {
             if (Grounded) jump();
@@ -139,9 +143,9 @@ public class PlayerController : MonoBehaviour
         Vector2 s = SpriteRenderer.sprite.bounds.size;
         s.y -= FeetSize;
         PlayerCollider.size = s;
-        PlayerCollider.offset = new Vector2 (0, FeetSize);
+        PlayerCollider.offset = new Vector2(0, FeetSize);
         Size = SizeIndex;
-        Feet.offset = new Vector2 (0, -((s.y + FeetSize) / 2));
+        Feet.offset = new Vector2(0, -((s.y + FeetSize) / 2));
     }
 
     // flip sprite
