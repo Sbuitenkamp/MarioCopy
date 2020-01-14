@@ -1712,6 +1712,9 @@ MonoBehaviour:
   Speed: 25
   MaxVelocity: 13
   JumpHeight: 20
+  FireBalls: 0
+  StarActive: 0
+  OldSize: 0
 --- !u!70 &944686583
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -2934,6 +2937,36 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.050900996}
   m_EdgeRadius: 0
+--- !u!1 &2038479072
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2038479073}
+  m_Layer: 0
+  m_Name: GameSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2038479073
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038479072}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.77148134, y: -3.216402, z: -101.11499}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2122608780
 GameObject:
   m_ObjectHideFlags: 0

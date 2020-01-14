@@ -27,14 +27,16 @@ public class FireBall : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        PlayerController playerController = GetComponentInParent<PlayerController>();
         if (col.gameObject.CompareTag("Enemy")) {
             col.gameObject.GetComponent<Goomba>().OnFireBall();
-            playerController.FireBalls--;
             Destroy(gameObject);
         } else if (Math.Abs(col.contacts[0].normal.x) > 0.9f) {
-            playerController.FireBalls--;
             Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        GetComponentInParent<PlayerController>().FireBalls--;
     }
 }

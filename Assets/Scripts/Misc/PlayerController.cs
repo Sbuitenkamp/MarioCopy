@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
@@ -30,7 +31,7 @@ public class PlayerController : MonoBehaviour
     public int OldSize;
     private float TimeLeft;
 
-    void Start()
+    private void Start()
     {
         RigidBody = GetComponent<Rigidbody2D>();
         PlayerCollider = GetComponent<CapsuleCollider2D>();
@@ -48,7 +49,13 @@ public class PlayerController : MonoBehaviour
         TimeLeft = 15f;
         FireBalls = 0;
     }
-    void FixedUpdate()
+
+    private void Awake()
+    {
+        Debug.Log(GameSystem.Instance);
+    }
+
+    private void FixedUpdate()
     {
         Vector2 velocity = RigidBody.velocity;
         velocity.x = Mathf.Clamp(velocity.x, -MaxVelocity, MaxVelocity);
@@ -121,7 +128,7 @@ public class PlayerController : MonoBehaviour
             StarActive = false;
         }
     }
-    void Update()
+    private void Update()
     {
         // movement
         if (Input.GetButtonDown("Jump") || Input.GetKeyDown("up")) PerformJump = true;
@@ -146,29 +153,26 @@ public class PlayerController : MonoBehaviour
             if (Size == 3 && !FireBall) FireBall = true;
         }
     }
-    void OnCollisionStay2D(Collision2D col)
+    private void OnCollisionStay2D(Collision2D col)
     {
         // ground check; using multiple tags because certain block will get certain tags, but all will be walkable
         List<string> groundTags = new List<string> { "Ground", "Block" };
         if (groundTags.Any(tag => tag.Contains(col.gameObject.tag)) && col.contacts[0].otherCollider.transform.gameObject.name == "Feet") Grounded = true;
     }
-    void OnCollisionExit2D(Collision2D col)
+    private void OnCollisionExit2D(Collision2D col)
     {
         Grounded = false;
     }
     
     public void Shrink()
     {
-        if (Size == 3) gameObject.GetComponent<SpriteRenderer>().sprite = (Sprite) Resources.Load("Actors/MarioBig", typeof(Sprite));
+        if (Size == 3) SpriteRenderer.sprite = (Sprite) Resources.Load("Actors/MarioBig", typeof(Sprite));
         else if (Size == 2) {
-            gameObject.GetComponent<SpriteRenderer>().sprite = (Sprite) Resources.Load("Actors/MarioSmall", typeof(Sprite));
-            Vector2 s = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size;
-            s.y -= FeetSize;
-            PlayerCollider.size = s;
-            PlayerCollider.offset = new Vector2 (0, FeetSize);
-            Feet.offset = new Vector2 (0, -((s.y + FeetSize) / 2));
+            SpriteRenderer.sprite = (Sprite) Resources.Load("Actors/MarioSmall", typeof(Sprite));
+            Grow(Size);
         }
         Size--;
+        if (Size <= 0) GameSystem.Instance.MinusLives();
     }
     // resize collider to fit the new sprite
     public void Grow(int sizeIndex)
@@ -179,7 +183,6 @@ public class PlayerController : MonoBehaviour
         PlayerCollider.offset = new Vector2(0, FeetSize);
         Size = sizeIndex;
         Feet.offset = new Vector2(0, -((s.y + FeetSize) / 2));
-        Debug.Log("bruh #7");
     }
     // star
     public void Star(int sizeIndex)
