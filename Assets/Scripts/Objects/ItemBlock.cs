@@ -10,23 +10,26 @@ public class ItemBlock : MonoBehaviour, Block
     public bool Active { get; set; }
     void Awake()
     {
-        Mushroom = gameObject.GetComponentInChildren<Mushroom>();
-        FireFlower = gameObject.GetComponentInChildren<FireFlower>();
-        Debug.Log(Mushroom);
-        Debug.Log(FireFlower);
+        Mushroom = GetComponentInChildren<Mushroom>();
+        FireFlower = GetComponentInChildren<FireFlower>();
         Active = true;
     }
 
-    public void OnActivate(Collision2D col)
+    public void OnActivate(Collider2D col)
     {
         PlayerController playerController = col.gameObject.GetComponent<PlayerController>();
-        if (playerController.Size == 1) Mushroom.OnReveal();
+        if (playerController.StarActive) {
+            if (playerController.OldSize == 1) Mushroom.OnReveal();
+            else FireFlower.OnReveal();
+        }
+        else if (playerController.Size == 1) Mushroom.OnReveal();
         else FireFlower.OnReveal();
         Active = false;
     }
-    void OnCollisionEnter2D(Collision2D col)
+    
+    void OnTriggerEnter2D(Collider2D col)
     {
-//        if (!Active) return;
+        if (!Active) return;
         if (col.gameObject.CompareTag("Player")) OnActivate(col);
     }
 }

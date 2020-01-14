@@ -6,5 +6,5 @@ public interface Block
 {
     bool Active { get; set; }
 
-    void OnActivate(Collision2D col);
+    void OnActivate(Collider2D col);
 }

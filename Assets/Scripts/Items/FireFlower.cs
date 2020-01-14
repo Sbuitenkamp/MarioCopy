@@ -13,12 +13,6 @@ public class FireFlower : MonoBehaviour, Item
         SizeIndex = 3;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
     public void OnReveal()
     {
         gameObject.SetActive(true);
@@ -29,9 +23,15 @@ public class FireFlower : MonoBehaviour, Item
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player")) {
+            PlayerController playerController = col.gameObject.GetComponent<PlayerController>();
+            SpriteRenderer spriteRenderer = col.gameObject.GetComponent<SpriteRenderer>();
             // swap sprite
-            col.gameObject.GetComponent<SpriteRenderer>().sprite = (Sprite)Resources.Load("Actors/MarioFire", typeof(Sprite));
-            col.gameObject.GetComponent<PlayerController>().Grow(SizeIndex);
+            if (playerController.StarActive) {
+                spriteRenderer.sprite = (Sprite)Resources.Load("Actors/MarioStarBig", typeof(Sprite));
+                playerController.OldSize = SizeIndex;
+            }
+            else spriteRenderer.sprite = (Sprite)Resources.Load("Actors/MarioFire", typeof(Sprite));
+            playerController.Grow(SizeIndex);
             // the item gone now
             Destroy(gameObject);
         }
