@@ -10,13 +10,12 @@ public class FireBall : MonoBehaviour
     private float MaxVelocity = 10.0f;
     private float Speed = 15.0f;
 
-    void Start()
+    private void Start()
     {
         Destroy(gameObject, 4);
         RigidBody = GetComponent<Rigidbody2D>();
     }
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Vector2 velocity = RigidBody.velocity;
         velocity.x = Mathf.Clamp(velocity.x, -MaxVelocity, MaxVelocity);
@@ -24,7 +23,6 @@ public class FireBall : MonoBehaviour
         if (Direction) RigidBody.AddForce(Vector2.left * Speed);
         else RigidBody.AddForce(Vector2.right * Speed);
     }
-
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Enemy")) {
@@ -34,7 +32,6 @@ public class FireBall : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     private void OnDestroy()
     {
         GetComponentInParent<PlayerController>().FireBalls--;

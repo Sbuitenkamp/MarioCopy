@@ -16,6 +16,8 @@ public class Coin : MonoBehaviour, Item
     {
         gameObject.SetActive(true);
         Destroy(gameObject, 1f);
+        Coins.Instance.AddCoin();
+        Score.Instance.AddScore(ScoreWorth);
     }
     public void OnActivate() {} // not used
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour 
 {
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public bool StarActive;
     public int OldSize;
     private float TimeLeft;
+    private bool Invincible;
+    private float InvincibleCounter;
 
     private void Start()
     {
@@ -48,13 +51,9 @@ public class PlayerController : MonoBehaviour
         StarActive = false;
         TimeLeft = 15f;
         FireBalls = 0;
+        Invincible = false;
+        InvincibleCounter = 0.0f;
     }
-
-    private void Awake()
-    {
-        Debug.Log(GameSystem.Instance);
-    }
-
     private void FixedUpdate()
     {
         Vector2 velocity = RigidBody.velocity;
@@ -130,6 +129,9 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+        InvincibleCounter -= Time.deltaTime;
+        if (InvincibleCounter <= 0) Invincible = false;
+        
         // movement
         if (Input.GetButtonDown("Jump") || Input.GetKeyDown("up")) PerformJump = true;
         // prevent double jump
@@ -172,7 +174,9 @@ public class PlayerController : MonoBehaviour
             Grow(Size);
         }
         Size--;
-        if (Size <= 0) GameSystem.Instance.MinusLives();
+        Invincible = true;
+        InvincibleCounter = 3.0f;
+        if (Size == 0) GameSystem.Instance.MinusLives();
     }
     // resize collider to fit the new sprite
     public void Grow(int sizeIndex)

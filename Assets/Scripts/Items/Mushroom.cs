@@ -5,7 +5,12 @@ using UnityEngine;
 
 public class Mushroom : MushroomClass
 {
-    void OnCollisionEnter2D(Collision2D col)
+    private void Awake()
+    {
+        ScoreWorth = 1000;
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player")) {
             PlayerController playerController = col.gameObject.GetComponent<PlayerController>();
@@ -17,6 +22,7 @@ public class Mushroom : MushroomClass
             }
             else spriteRenderer.sprite = (Sprite)Resources.Load("Actors/MarioBig", typeof(Sprite));
             playerController.Grow(SizeIndex);
+            Score.Instance.AddScore(ScoreWorth);
             // the item gone now
             Destroy(gameObject);
         } else if (col.contacts[0].otherCollider.gameObject.name == "Wallcheck") Direction = !Direction;

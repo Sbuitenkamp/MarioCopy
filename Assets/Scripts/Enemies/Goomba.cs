@@ -6,7 +6,16 @@ using UnityEngine;
 
 public class Goomba : MonoBehaviour, Enemy
 {
-    public bool Alive { get; set; }
+    private bool alive;
+    public bool Alive
+    {
+        get => alive;
+        set {
+            alive = value;
+            if (!value) Score.Instance.AddScore(ScoreWorth);
+        }
+    }
+
     public int ScoreWorth { get; set; }
     private CapsuleCollider2D Collider;
     private bool Direction; // true = right; false = left
@@ -59,11 +68,12 @@ public class Goomba : MonoBehaviour, Enemy
         // and then remove it to prevent the player from interacting with it
         Destroy(GetComponent<Rigidbody2D>(), 0.27f);
         Destroy(Collider);
-        Destroy(GetComponentInChildren<BoxCollider2D>());
+        foreach (Transform child in transform) Destroy(child.gameObject);
         Destroy(gameObject, 1.5f);
     }
     void OnCollisionEnter2D(Collision2D col)
     {
+        if (!Alive) return;
         if (col.gameObject.CompareTag("Player")) {
             PlayerController playerController = col.gameObject.GetComponent<PlayerController>();
             if (playerController.StarActive) OnFireBall();
@@ -76,17 +86,14 @@ public class Goomba : MonoBehaviour, Enemy
         } else if (col.contacts[0].otherCollider.gameObject.name == "Wallcheck") Direction = !Direction;
         else GroundCheck(col);
     }
-
     private void OnCollisionExit2D(Collision2D col)
     {
         GroundCheck(col);
     }
-
     private void OnCollisionStay2D(Collision2D col)
     {
         GroundCheck(col); 
     }
-
     private void GroundCheck(Collision2D col)
     {
         List<string> groundTags = new List<string> { "Ground", "Block" };

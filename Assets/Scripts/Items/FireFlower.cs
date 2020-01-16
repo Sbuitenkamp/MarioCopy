@@ -11,6 +11,7 @@ public class FireFlower : MonoBehaviour, Item
     {
         gameObject.SetActive(false);
         SizeIndex = 3;
+        ScoreWorth = 1000;
     }
 
     public void OnReveal()
@@ -32,6 +33,7 @@ public class FireFlower : MonoBehaviour, Item
             }
             else spriteRenderer.sprite = (Sprite)Resources.Load("Actors/MarioFire", typeof(Sprite));
             playerController.Grow(SizeIndex);
+            Score.Instance.AddScore(ScoreWorth);
             // the item gone now
             Destroy(gameObject);
         }

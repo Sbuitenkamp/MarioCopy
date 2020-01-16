@@ -18,6 +18,7 @@ public class Star : MonoBehaviour, Item
     {
         gameObject.SetActive(false);
         SizeIndex = 50;
+        ScoreWorth = 1000;
         Moving = false;
         Direction = true;
         RigidBody = GetComponent<Rigidbody2D>();
@@ -45,6 +46,7 @@ public class Star : MonoBehaviour, Item
         if (col.gameObject.CompareTag("Player")) {
             // star power active
             col.gameObject.GetComponent<PlayerController>().Star(SizeIndex);
+            Score.Instance.AddScore(ScoreWorth);
             // the item gone now
             Destroy(gameObject);
         }

@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameSystem : MonoBehaviour
 {
-    private int Lives;
     private static GameSystem ThisInstance;
     public static GameSystem Instance
     {
@@ -21,36 +22,37 @@ public class GameSystem : MonoBehaviour
         }
     }
 
+    public int Lives { get; set; }
+    public int Score { get; set; }
+    public int Level { get; set; }
+    public int World { get; set; }
+
     private void Start()
     {
         Lives = 3;
-        Debug.Log(Lives);
+        Score = 0;
     }
-
-    void Awake()
+    private void Awake()
     {
-        ThisInstance = this;
         DontDestroyOnLoad(gameObject);
+        ThisInstance = this;
+        Level = 1;
+        World = 1;
+        // TODO custom level and world managing
     }
-
-    void OnDestroy()
+    private void OnDestroy()
     {
         ThisInstance = null;
     }
-
-
     public void MinusLives()
     {
-        // if lives is at 0 the player is at his last life, if they die then and this method gets invoked it's game over;
+        // if lives is at 0 the player is at his last life, if they die then this method gets invoked and it's game over;
         if (Lives == 0) {
-            Debug.Log("Game Over");
+            SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            Destroy(gameObject); // destroy so the game gets reset
+        } else {
+            SceneManager.LoadScene("OverView", LoadSceneMode.Single);
+            Lives--;
         }
-        Lives--;
-        Debug.Log(Lives);
-    }
-
-    public int GetLives()
-    {
-        return Lives;
     }
 }

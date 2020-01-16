@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
+    <e p="C:\Users\istev\.Rider2019.1\config\consoles\db" t="IncludeRecursive" />
+    <e p="C:\Users\istev\.Rider2019.1\config\extensions" t="IncludeRecursive" />
     <e p="C:\Users\istev\.Rider2019.1\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\istev\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_MarioCopy.-857039452.00" t="ExcludeRecursive" />
     <e p="D:\School\19-20\Project\Mario Ripoff\MarioCopy" t="IncludeRecursive">
@@ -33,6 +35,15 @@
             <e p="InvisibleBlock.cs" t="Include" />
             <e p="ItemBlock.cs" t="Include" />
             <e p="StarBlock.cs" t="Include" />
+          </e>
+          <e p="UI" t="Include">
+            <e p="Coins.cs" t="Include" />
+            <e p="Lives.cs" t="Include" />
+            <e p="OverviewTimer.cs" t="Include" />
+            <e p="Score.cs" t="Include" />
+            <e p="StartGame.cs" t="Include" />
+            <e p="Timer.cs" t="Include" />
+            <e p="WorldLevel.cs" t="Include" />
           </e>
         </e>
       </e>

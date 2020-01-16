@@ -7,11 +7,13 @@ public class ItemBlock : MonoBehaviour, Block
 {
     private Mushroom Mushroom;
     private FireFlower FireFlower;
+    private SpriteRenderer SpriteRenderer;
     public bool Active { get; set; }
     void Awake()
     {
         Mushroom = GetComponentInChildren<Mushroom>();
         FireFlower = GetComponentInChildren<FireFlower>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
         Active = true;
     }
 
@@ -24,6 +26,7 @@ public class ItemBlock : MonoBehaviour, Block
         }
         else if (playerController.Size == 1) Mushroom.OnReveal();
         else FireFlower.OnReveal();
+        SpriteRenderer.sprite = (Sprite) Resources.Load("Objects/BlockInactive", typeof(Sprite));
         Active = false;
     }
     

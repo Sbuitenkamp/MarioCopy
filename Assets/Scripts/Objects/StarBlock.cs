@@ -6,11 +6,13 @@ using UnityEngine;
 public class StarBlock : MonoBehaviour, Block
 {
     private Star Star;
+    private SpriteRenderer SpriteRenderer;
     public bool Active { get; set; }
     
     public void Awake()
     {
         Star = GetComponentInChildren<Star>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
         Active = true;
     }
 
@@ -24,8 +26,9 @@ public class StarBlock : MonoBehaviour, Block
     {
         if (!Active) return;
         if (col.gameObject.CompareTag("Player")) {
-            Active = false;
             OnActivate(col);
+            SpriteRenderer.sprite = (Sprite) Resources.Load("Objects/BlockInactive", typeof(Sprite));
+            Active = false;
         }
     }
 }
