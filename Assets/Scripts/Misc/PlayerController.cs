@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
@@ -13,14 +14,15 @@ public class PlayerController : MonoBehaviour
     private bool PerformJump;
     private bool MoveRight;
     private bool MoveLeft;
-    private bool Flipped;
-    public float Speed = 25.0f;
+    public bool Flipped;
+    public float Speed = 20.0f;
     public float MaxVelocity = 13;
+    private bool JumpRelease;
 
     // feet ( ͡° ͜ʖ ͡°)
     private BoxCollider2D Feet;
     private float FeetSize;
-    public float JumpHeight = 20.0f;
+    public float JumpHeight = 10.0f;
     
     // game stuff
     public int Size { get; private set; }
@@ -31,8 +33,10 @@ public class PlayerController : MonoBehaviour
     public bool StarActive;
     public int OldSize;
     private float TimeLeft;
-    private bool Invincible;
+    public bool Invincible;
     private float InvincibleCounter;
+    private bool EndGameWalk;
+    private bool HasFired;
 
     private void Start()
     {
@@ -53,9 +57,19 @@ public class PlayerController : MonoBehaviour
         FireBalls = 0;
         Invincible = false;
         InvincibleCounter = 0.0f;
+        JumpRelease = false;
+        EndGameWalk = false;
+        HasFired = false;
     }
     private void FixedUpdate()
     {
+        if (EndGameWalk) {
+            Flip(false);
+            MoveLeft = false;
+            MoveRight = false;
+            if (Grounded) RigidBody.velocity = Vector2.right * 3.0f;
+        } 
+        if (GameSystem.Instance.Paused) return;
         Vector2 velocity = RigidBody.velocity;
         velocity.x = Mathf.Clamp(velocity.x, -MaxVelocity, MaxVelocity);
         RigidBody.velocity = velocity;
@@ -80,6 +94,7 @@ public class PlayerController : MonoBehaviour
         }
 
         void jump() {
+            JumpRelease = true;
             RigidBody.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
         }
         void move(bool direction) {
@@ -94,7 +109,6 @@ public class PlayerController : MonoBehaviour
             }
         }
         void shoot() {
-            Debug.Log(FireBalls);
             GameObject fireBall = new GameObject();
             Rigidbody2D fireBody = fireBall.AddComponent<Rigidbody2D>();
             FireBall script = fireBall.AddComponent<FireBall>();
@@ -113,29 +127,46 @@ public class PlayerController : MonoBehaviour
             // fire direction
             fireBall.transform.position = Flipped ? new Vector2(gameObject.transform.position.x - bounds.extents.x - 0.3f, bounds.center.y) : new Vector2(gameObject.transform.position.x + bounds.extents.x + 0.3f, bounds.center.y);
             FireBalls++;
+            StartCoroutine(fire());
+        }
+        IEnumerator fire() {
+            HasFired = true;
+            yield return new WaitForSeconds(0.5f);
+            HasFired = false;
         }
         // end the star effect
         void endStar() {
             Grow(OldSize);
             string path;
+            
             if (OldSize <= 1) path = "Actors/MarioSmall"; 
             else if (OldSize == 3) path = "Actors/MarioFire";
             else path = "Actors/MarioBig";
             
-            Debug.Log(path);
             SpriteRenderer.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
             StarActive = false;
         }
     }
     private void Update()
     {
+        if (GameSystem.Instance.Paused) return;
         InvincibleCounter -= Time.deltaTime;
         if (InvincibleCounter <= 0) Invincible = false;
         
         // movement
-        if (Input.GetButtonDown("Jump") || Input.GetKeyDown("up")) PerformJump = true;
+        if (Input.GetButtonDown("Jump") || Input.GetKeyDown("up")) {
+            PerformJump = true;
+        }
         // prevent double jump
-        if (Input.GetButtonUp("Jump") || Input.GetKeyUp("up") && Grounded) Grounded = false;
+        if (Input.GetButtonUp("Jump") || Input.GetKeyUp("up")) {
+            PerformJump = false;
+            Grounded = false;
+            if (JumpRelease) {
+                float maxVelocity = 10;
+                RigidBody.velocity = Vector2.ClampMagnitude(RigidBody.velocity, maxVelocity);
+                JumpRelease = false;
+            }
+        }
 
         if (Input.GetKey("right")) MoveRight = true;
         if (Input.GetKeyUp("right")) MoveRight = false;
@@ -152,8 +183,12 @@ public class PlayerController : MonoBehaviour
         // fireball
         if (Input.GetButtonDown("Fire1")) {
             // for future updates adding items like ice flower, just put an else if with the corresponding size
-            if (Size == 3 && !FireBall) FireBall = true;
+            if (Size == 3 && !FireBall && !HasFired) FireBall = true;
         }
+    }
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("GameStopper")) EndGameWalk = false;
     }
     private void OnCollisionStay2D(Collision2D col)
     {
@@ -175,7 +210,7 @@ public class PlayerController : MonoBehaviour
         }
         Size--;
         Invincible = true;
-        InvincibleCounter = 3.0f;
+        InvincibleCounter = 2.0f;
         if (Size == 0) GameSystem.Instance.MinusLives();
     }
     // resize collider to fit the new sprite
@@ -199,8 +234,19 @@ public class PlayerController : MonoBehaviour
         SpriteRenderer.sprite = (Sprite)Resources.Load(path, typeof(Sprite));
         Grow(sizeIndex);
     }
+    public void EndGame(Vector2 pos)
+    {
+        RigidBody.gravityScale = 2.5f;
+        StartCoroutine(start());
+
+        IEnumerator start() {
+            yield return new WaitForSeconds(1.3f);
+            transform.position = pos;
+            EndGameWalk = true;
+        }
+    }
     // flip sprite
-    private void Flip(bool expected)
+    public void Flip(bool expected)
     {
         if (Flipped != expected) {
             Flipped = !Flipped;

@@ -27,13 +27,19 @@
             <e p="GameSystem.cs" t="Include" />
             <e p="PlayerController.cs" t="Include" />
           </e>
+          <e p="Models" t="Include">
+            <e p="Data.cs" t="Include" />
+          </e>
           <e p="MushroomClass.cs" t="Include" />
           <e p="Objects" t="Include">
             <e p="BreakableBlock.cs" t="Include" />
             <e p="Camera.cs" t="Include" />
             <e p="CoinBlock.cs" t="Include" />
+            <e p="Flag.cs" t="Include" />
+            <e p="FlagBase.cs" t="Include" />
             <e p="InvisibleBlock.cs" t="Include" />
             <e p="ItemBlock.cs" t="Include" />
+            <e p="LevelEnd.cs" t="Include" />
             <e p="StarBlock.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
@@ -43,6 +49,7 @@
             <e p="Score.cs" t="Include" />
             <e p="StartGame.cs" t="Include" />
             <e p="Timer.cs" t="Include" />
+            <e p="TopScore.cs" t="Include" />
             <e p="WorldLevel.cs" t="Include" />
           </e>
         </e>

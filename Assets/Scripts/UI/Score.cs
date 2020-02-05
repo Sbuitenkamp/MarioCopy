@@ -22,22 +22,21 @@ public class Score : MonoBehaviour
         }
     }
 
-    private Text ScoreText;
-    private int ScoreAmount;
+    public Text ScoreText;
 
-    private void Start()
-    {
-        ScoreAmount = 0;
-    }
     private void Awake()
     {
         ThisInstance = this;
         ScoreText = GetComponentInParent<Text>();
-        ScoreText.text = ScoreAmount.ToString("000000");
+        ScoreText.text = GameSystem.Instance.GameScore.ToString("000000");
     }
     public void AddScore(int amount)
     {
-        ScoreAmount += amount;
-        ScoreText.text = ScoreAmount.ToString("000000");
+        GameSystem.Instance.GameScore += amount;
+        ScoreText.text = GameSystem.Instance.GameScore.ToString("000000");
+    }
+    public int GetScore()
+    {
+        return GameSystem.Instance.GameScore;
     }
 }

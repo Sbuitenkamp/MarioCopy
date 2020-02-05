@@ -10,6 +10,7 @@ TagManager:
   - BlockActivator
   - Enemy
   - Item
+  - GameStopper
   layers:
   - Default
   - TransparentFX

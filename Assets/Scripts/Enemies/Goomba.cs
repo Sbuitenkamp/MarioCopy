@@ -36,6 +36,7 @@ public class Goomba : MonoBehaviour, Enemy
     }
     void FixedUpdate()
     {
+        if (GameSystem.Instance.Paused) return;
         if (Alive) {
             Vector2 velocity = RigidBody.velocity;
             velocity.x = Mathf.Clamp(velocity.x, -MaxVelocity, MaxVelocity);
@@ -47,7 +48,6 @@ public class Goomba : MonoBehaviour, Enemy
 
     public void OnFireBall()
     {
-        Alive = false;
         Destroy(GetComponent<Collider2D>());
         foreach (Transform child in transform) Destroy(child.gameObject);
         SpriteRenderer.flipY = true;
@@ -76,13 +76,15 @@ public class Goomba : MonoBehaviour, Enemy
         if (!Alive) return;
         if (col.gameObject.CompareTag("Player")) {
             PlayerController playerController = col.gameObject.GetComponent<PlayerController>();
-            if (playerController.StarActive) OnFireBall();
-            // if on top of head
-            else if (col.contacts[0].otherCollider.gameObject.name == "Head") {
-                OnJump(col);
+            if (playerController.StarActive) {
                 Alive = false;
-            // check if alive and then reduce mario's size
-            } else if (Alive) playerController.Shrink();
+                Physics2D.IgnoreCollision(col.collider, Collider);
+                OnFireBall();
+            } else if (col.contacts[0].otherCollider.gameObject.name == "Head") { // if on top of head
+                Alive = false;
+                Physics2D.IgnoreCollision(col.collider, Collider);
+                OnJump(col);
+            } else if (Alive && !playerController.Invincible) playerController.Shrink(); // check if alive and then reduce mario's size
         } else if (col.contacts[0].otherCollider.gameObject.name == "Wallcheck") Direction = !Direction;
         else GroundCheck(col);
     }
