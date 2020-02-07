@@ -179,7 +179,7 @@ MonoBehaviour:
   Flipped: 0
   Speed: 20
   MaxVelocity: 10
-  JumpHeight: 18
+  JumpHeight: 14.5
   FireBalls: 0
   StarActive: 0
   OldSize: 0

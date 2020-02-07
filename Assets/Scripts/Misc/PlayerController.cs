@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     // feet ( ͡° ͜ʖ ͡°)
     private BoxCollider2D Feet;
     private float FeetSize;
-    public float JumpHeight = 10.0f;
+    public float JumpHeight = 15.0f;
     
     // game stuff
     public int Size { get; private set; }
@@ -216,6 +216,8 @@ public class PlayerController : MonoBehaviour
     // resize collider to fit the new sprite
     public void Grow(int sizeIndex)
     {
+        if (sizeIndex != 1 && sizeIndex != 9000) JumpHeight = 16;
+        else if (sizeIndex == 1) JumpHeight = 15;
         Vector2 s = SpriteRenderer.sprite.bounds.size;
         s.y -= FeetSize;
         PlayerCollider.size = s;
