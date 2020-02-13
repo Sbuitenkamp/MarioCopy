@@ -34,6 +34,7 @@ public class LevelEnd : MonoBehaviour
         }
         IEnumerator nextScene() {
             yield return new WaitForSeconds(2);
+            Destroy(GameSystem.Instance.gameObject); // when you implement custom level managing, call this only when going back to main menu
             // make use of GameSystem.Instance.World and .Level to check the next level
             SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         }
